@@ -1,4 +1,16 @@
+# 아래 하한은 실제로 돌려본 버전이다. 더 낮은 버전도 쓰는 API가 오래된
+# 것들이라 대체로 동작하겠지만, 확인하지 않았으므로 하한으로 두지 않았다.
+#
+# 검증 환경: Python 3.13
+#   - opencv-python 5.0.0.93 과 4.12.0 양쪽에서 확인
+#     4.12에서는 pixel_ops.py의 회전 대조 수치만 달라진다 (평균 오차 약 0.8).
+#     warpAffine이 5비트 고정소수점 보간을 쓰기 때문이며, 전처리 결과와
+#     이상치 판정은 두 버전이 같다.
+#   - datasets 5.0.0 / numpy 2.4.3, 2.2.6 / matplotlib 3.10.8
 datasets>=5.0.0
-opencv-python>=5.0.0
-numpy>=2.0.0
-matplotlib>=3.10.0
+opencv-python>=4.12
+numpy>=2.2
+matplotlib>=3.10
+
+# 제출용 PPT 생성(make_report.py)에만 필요
+python-pptx>=1.0.2

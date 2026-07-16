@@ -382,6 +382,18 @@ def slide4(prs: Presentation) -> None:
         Inches(0.4),
         [("5장이 전부 정상이라, 제거 분기는 합성 이미지로 검증", 13, True, ACCENT)],
     )
+    add_text(
+        slide,
+        Inches(0.6),
+        Inches(6.25),
+        Inches(6.1),
+        Inches(0.8),
+        [
+            ("값이 균일한 이미지는 Otsu가 나눌 경계가 없어 면적이 100%로 나온다.", 10.5, False, MUTED),
+            ("밝기 검사가 먼저 걸러내므로 판정은 옳지만 이 수치 자체엔 의미가 없다.", 10.5, False, MUTED),
+        ],
+        space_after=2,
+    )
     add_table(
         slide,
         Inches(0.6),
@@ -390,7 +402,7 @@ def slide4(prs: Presentation) -> None:
         Inches(1.7),
         [
             ["케이스", "면적", "이론값", "판정"],
-            ["균일한 어두운 이미지", "—", "—", "어두움 제거"],
+            ["균일한 어두운 이미지", "100%", "퇴화 사례", "어두움 제거"],
             ["밝은 배경 · 20×20 객체", "0.8%", "0.8%", "객체 작음 제거"],
             ["밝은 배경 · 140×140 객체", "39.0%", "39.1%", "PASS"],
             ["어두운 배경 · 밝은 객체", "39.0%", "39.1%", "PASS"],
@@ -429,6 +441,8 @@ def slide4(prs: Presentation) -> None:
         [
             ("NumPy 직접 구현 대조 — 오차 ≤ 1 (반올림 수준)", 13, True, ACCENT),
             ("grayscale 0.0011 · blur 0.0021 · flip 0.0000 · rotate 0.0004", 11.5, False, INK),
+            ("(cv2 5.0 기준. 4.12는 회전만 0.81 — warpAffine이 5비트 고정소수점", 10.5, False, MUTED),
+            ("보간을 쓴다. 전처리 결과와 판정은 두 버전 동일)", 10.5, False, MUTED),
             ("", 3, False, INK),
             ("대조하지 않았으면 못 찾았을 두 가지", 11.5, True, INK),
             ("· cv2는 sigma≤0 & ksize≤7이면 공식이 아니라 하드코딩 이항계수", 11.5, False, INK),

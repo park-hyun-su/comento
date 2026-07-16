@@ -49,13 +49,29 @@ def is_too_dark(image: np.ndarray, threshold: float = DARK_MEAN_THRESHOLD) -> bo
 
 
 def _border_touch_ratio(mask: np.ndarray) -> float:
-    """마스크가 이미지 테두리를 얼마나 차지하는지(0~1).
-
-    배경은 보통 프레임 가장자리를 따라 이어지고 피사체는 그렇지 않다.
-    전경/배경을 가려낼 때 이 값을 근거로 쓴다.
-    """
+    """마스크가 이미지 테두리를 얼마나 차지하는지(0~1)."""
     border = np.concatenate([mask[0, :], mask[-1, :], mask[:, 0], mask[:, -1]])
     return float(np.count_nonzero(border)) / border.size
+
+
+def _center_coverage(mask: np.ndarray) -> float:
+    """마스크가 중앙 절반 영역을 얼마나 채우는지(0~1)."""
+    h, w = mask.shape
+    center = mask[h // 4 : 3 * h // 4, w // 4 : 3 * w // 4]
+    return float(np.count_nonzero(center)) / center.size
+
+
+def _foreground_score(mask: np.ndarray) -> float:
+    """전경다움 점수. 높을수록 피사체일 가능성이 크다.
+
+    두 단서를 합친다. 피사체는 보통 가운데 있고(중심 커버리지가 높고),
+    배경은 프레임 가장자리를 따라 이어진다(테두리 점유가 높다).
+
+    어느 하나만 쓰면 깨진다. 테두리만 보면 화면을 꽉 채운 피사체가 테두리를
+    많이 건드려서 배경으로 오인되고, 중심만 보면 작은 피사체를 감싼 배경이
+    중앙까지 덮고 있어 배경이 이긴다. 빼서 합치면 두 경우 모두 걸러진다.
+    """
+    return _center_coverage(mask) - _border_touch_ratio(mask)
 
 
 def _foreground_mask(image: np.ndarray) -> np.ndarray:
@@ -63,8 +79,8 @@ def _foreground_mask(image: np.ndarray) -> np.ndarray:
 
     Otsu는 밝기 기준으로 두 덩어리를 나눠줄 뿐, 어느 쪽이 피사체인지는 알려주지
     않는다. 음식 사진은 접시가 밝은 경우와 어두운 경우가 섞여 있어 한쪽으로
-    고정할 수 없다. 그래서 마스크와 그 반전을 모두 후보로 두고, 테두리를 덜
-    차지하는 쪽을 전경으로 택한다.
+    고정할 수 없다. 그래서 마스크와 그 반전을 모두 후보로 두고 전경다움 점수가
+    높은 쪽을 택한다.
     """
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -77,7 +93,7 @@ def _foreground_mask(image: np.ndarray) -> np.ndarray:
         cleaned = cv2.morphologyEx(cleaned, cv2.MORPH_CLOSE, kernel)
         candidates.append(cleaned)
 
-    return min(candidates, key=_border_touch_ratio)
+    return max(candidates, key=_foreground_score)
 
 
 def object_mask(image: np.ndarray) -> np.ndarray:

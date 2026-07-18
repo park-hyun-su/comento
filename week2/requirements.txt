@@ -1,0 +1,6 @@
+numpy>=1.24
+opencv-python>=4.8
+matplotlib>=3.7
+pytest>=7.4
+# 선택: 인터랙티브 3D 뷰어 / .ply 로드용 (없어도 파이프라인은 동작)
+# open3d>=0.17

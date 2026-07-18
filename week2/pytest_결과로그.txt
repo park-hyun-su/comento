@@ -1,0 +1,25 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.9, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\박현수\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\박현수\Desktop\College\대학교\대외활동\2026\코멘토\2주차_2D_to_3D
+plugins: anyio-4.13.0
+collecting ... collected 16 items
+
+tests/test_depth_to_3d.py::test_to_grayscale_shape_and_dtype PASSED      [  6%]
+tests/test_depth_to_3d.py::test_to_grayscale_known_value PASSED          [ 12%]
+tests/test_depth_to_3d.py::test_to_grayscale_passthrough_when_already_gray PASSED [ 18%]
+tests/test_depth_to_3d.py::test_to_grayscale_none_raises PASSED          [ 25%]
+tests/test_depth_to_3d.py::test_normalize01_range PASSED                 [ 31%]
+tests/test_depth_to_3d.py::test_normalize01_uniform_is_zero PASSED       [ 37%]
+tests/test_depth_to_3d.py::test_estimate_depth_range PASSED              [ 43%]
+tests/test_depth_to_3d.py::test_estimate_depth_invert_flips_extremes PASSED [ 50%]
+tests/test_depth_to_3d.py::test_pointcloud_count_full PASSED             [ 56%]
+tests/test_depth_to_3d.py::test_pointcloud_count_subsampled PASSED       [ 62%]
+tests/test_depth_to_3d.py::test_pointcloud_z_equals_depth_times_scale PASSED [ 68%]
+tests/test_depth_to_3d.py::test_pointcloud_bad_step_raises PASSED        [ 75%]
+tests/test_depth_to_3d.py::test_pointcloud_colors_align PASSED           [ 81%]
+tests/test_depth_to_3d.py::test_save_ply_header_and_count PASSED         [ 87%]
+tests/test_depth_to_3d.py::test_backproject_pinhole_principal_point PASSED [ 93%]
+tests/test_depth_to_3d.py::test_synthetic_scene_shape PASSED             [100%]
+
+============================= 16 passed in 0.71s ==============================
